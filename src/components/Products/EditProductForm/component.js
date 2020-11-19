@@ -19,13 +19,13 @@ export const EditProductForm = (props) => {
       validate={(values) => {
         const errors = {}
         if (!values.productName) {
-          errors.productName = 'Verplicht'
+          errors.productName = 'Verplicht!'
         }
         if (!values.productDescription) {
-          errors.productDescription = 'Verplicht'
+          errors.productDescription = 'Verplicht!'
         }
         if (!values.productPrice) {
-          errors.productPrice = 'Verplicht'
+          errors.productPrice = 'Verplicht!'
         }
 
         return errors
