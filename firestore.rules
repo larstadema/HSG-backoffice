@@ -1,0 +1,37 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /reservationDates/{reservationDatesId}{
+      allow read: if isSignedIn() && emailVerified() || isAdmin();
+      allow write, update, delete: if isSignedIn() && emailVerified() && isAdmin();
+    }
+    match /{path=**}/reservations/{reservationId} {
+      allow create: if isSignedIn() && emailVerified() && isUser(incomingData().userId) || isAdmin();
+      allow read, write, update, delete: if isSignedIn() && emailVerified() && isAdmin();
+    }
+    match /products/{productsId}{
+     allow read: if isSignedIn() && emailVerified() || isAdmin();
+      allow write, update, delete: if isSignedIn() && emailVerified() && isAdmin();
+    }
+    match /orders/{orderId}{
+      allow create, read: if isSignedIn() && emailVerified() && isUser(incomingData().userId) || isAdmin();
+      allow read, write, update, delete: if isSignedIn() && emailVerified() && isAdmin();
+    }
+  }
+
+  function isSignedIn() {
+    return request.auth != null;
+  }
+  function emailVerified() {
+    return request.auth.token.email_verified;
+  }
+  function incomingData() {
+    return request.resource.data;
+  }
+  function isUser(userId) {
+    return request.auth.uid == userId;
+  }
+  function isAdmin(){
+    return request.auth.token.admin == true;
+  }
+}

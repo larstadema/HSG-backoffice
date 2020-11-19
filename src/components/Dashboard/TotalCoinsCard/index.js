@@ -1,0 +1,1 @@
+export { default as TotalCoinsCard } from './container'  
